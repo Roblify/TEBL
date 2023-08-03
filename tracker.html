@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Easter Bunny Tracker</title>
+    <link rel="shortcut icon" type="x-icon" href="Bunny.png">
+    <meta property="og:title" content="Easter Bunny Tracker">
+    <meta property="og:description" content="Track the Easter Bunny as he is delivering eggs and baskets!">
+    <meta property="og:image"
+        content="https://cdn.discordapp.com/attachments/1076345667598954567/1123017297687228467/New_Project_25.png">
+    <meta property="og:url" content="https://www.trackeasterbunny.live/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/6.3.0/turf.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui;
+        }
+
+        #map {
+            position: absolute;
+            top: 40px;
+            bottom: 0;
+            width: 100%;
+            z-index: 0;
+        }
+
+        #top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #0d295c;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        #map-controls {
+            position: absolute;
+            bottom: 75px;
+            left: 10px;
+            z-index: 2;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .lock {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .unlock {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .baskets-text {
+            padding-right: 75px;
+        }
+
+        .map-button {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .satellite-button {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="top-bar">
+        <span style="flex-grow: 1; text-align: left;" id="last-seen">Last Seen: Easter Island</span>
+        <span>Heading to: Nothing</span>
+        <span id="duration" style="flex-grow: 1; text-align: right; display: none;">Duration: </span>
+        <span class="baskets-text" style="flex-grow: 1; text-align: right;">Eggs Delivered: 0</span>
+    </div>
+
+
+    <div id="map"></div>
+    <div id="map-controls">
+        <span class="map-button" onclick="toggleDarkMode()">Toggle Dark Mode </span>
+        <span class="satellite-button" onclick="toggleSatelliteMode()"> - Toggle Satellite Mode</span>
+        <span class="lock" onclick="lockOn()"> - Lock on Easter Bunny -</span>
+        <span class="unlock" onclick="unlockOn()"> Unlock on Easter Bunny</span>
+    </div>
+
+
+
+    <script>
+        var darkMode = false;
+        var satelliteMode = false;
+        var buttonElement = document.querySelector('.map-button');
+        var satelliteButtonElement = document.querySelector('.satellite-button');
+        let lockView = true;
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            updateMapStyle();
+            updateButtonLabel();
+        }
+
+        function toggleSatelliteMode() {
+            satelliteMode = !satelliteMode;
+            updateMapStyle();
+            updateSatelliteButtonLabel();
+        }
+
+        function updateMapStyle() {
+            if (satelliteMode) {
+                map.setStyle('mapbox://styles/mapbox/satellite-v9');
+            } else {
+                map.setStyle(darkMode ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/streets-v11');
+            }
+        }
+
+        function updateButtonLabel() {
+            buttonElement.textContent = darkMode ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+        }
+
+        function updateSatelliteButtonLabel() {
+            satelliteButtonElement.textContent = satelliteMode ? 'Toggle Map Mode' : 'Toggle Satellite Mode';
+        }
+
+        function lockOn() {
+            lockView = true;
+        }
+
+        function unlockOn() {
+            lockView = false;
+        }
+
+
+        var countdownInterval;
+
+        function updateCountdown(arrivalTime) {
+            // Clear any existing interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
+            countdownInterval = setInterval(function () {
+                var now = new Date().getTime();
+                var distance = arrivalTime - now;
+
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("duration").textContent = "Duration: " + minutes + " minutes, " + seconds + " seconds ";
+
+                // If the countdown is over, clear the interval
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById("duration").textContent = "Arrived!";
+                }
+            }, 1000);
+        }
+
+        var bunnyMarker;
+
+        var startTimestamp = null;
+        var progress = 0; // Progress from 0 to 1
+
+        function animateBunnyMovement(startLat, startLng, endLat, endLng, duration) {
+            return new Promise((resolve, reject) => {
+                const start = [startLng, startLat]; // Set the start coordinates
+                const end = [endLng, endLat]; // Set the end coordinates
+                duration = duration * 1000; // Convert duration from seconds to milliseconds
+                var startTimestamp = null;
+                var progress = 0; // Progress from 0 to 1
+
+                function animate(timestamp) {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const elapsed = timestamp - startTimestamp; // Time elapsed in milliseconds
+                    progress = elapsed / duration; // Progress from 0 to 1
+
+                    if (progress > 1) progress = 1; // Ensure progress does not exceed 1
+
+                    // Calculate current lng and lat
+                    const lng = start[0] + (end[0] - start[0]) * progress;
+                    const lat = start[1] + (end[1] - start[1]) * progress;
+
+                    // Update bunnyMarker position
+                    bunnyMarker.setLngLat([lng, lat]);
+
+                    if (lockView) {
+                        map.setCenter([lng, lat]);
+                    }
+
+                    // If the animation hasn't finished, keep going
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        resolve(); // Resolve the promise when the animation is finished
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            });
+        }
+
+        mapboxgl.accessToken = 'pk.eyJ1Ijoicm9ibGlmeSIsImEiOiJjbGs2NjZwZmgwNTE5M25wZnEyaThsMnRiIn0.teOnWl4FrKb8PCkW6JNWhA';
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+            center: [-109.367, -27.112],
+            zoom: 9 // starting zoom
+        });
+
+        function createBunnyMarker(size) {
+            var img = document.createElement('img');
+            img.src = 'Bunny.png';
+            img.width = size;
+            img.height = size;
+            return img;
+        }
+
+        function createBasketMarker(size) {
+            var img = document.createElement('img');
+            img.src = 'Basket.png';
+            img.width = size;
+            img.height = size;
+            return img;
+        }
+
+        function updateHeadingTo(city, region) {
+            document.querySelector('#top-bar span:nth-child(2)').innerHTML = `Heading to: ${city}, ${region}`;
+        }
+
+        async function moveBunny() {
+            let response = await fetch('route.json');
+            let data = await response.json();
+            data = data.filter(item => item.DR >= 0);
+
+            let duration = 0;
+            for (let i = 0; i < data.length - 1; i++) {
+                let startLng = data[i]['Longitude'];
+                let startLat = data[i]['Latitude'];
+                let endLng = data[i + 1]['Longitude'];
+                let endLat = data[i + 1]['Latitude'];
+
+                let lastCity = data[i]["City"];
+                let lastRegion = data[i]["Region"];
+                document.getElementById("last-seen").textContent = `Last Seen: ${lastCity}, ${lastRegion}`;
+
+                let nextCity = data[i + 1]["City"];
+                let nextRegion = data[i + 1]["Region"];
+                updateHeadingTo(nextCity, nextRegion);
+
+                let DR = data[i + 1]["DR"];
+                if (DR > 75) {
+                    document.getElementById("duration").style.display = "block";
+                    duration = data[i + 1]["Unix Arrival Arrival"] - data[i]["Unix Arrival Arrival"];
+                    updateCountdown(new Date().getTime() + duration * 1000);
+                } else {
+                    document.getElementById("duration").style.display = "none";
+                }
+
+                // Wait for the animation to finish before moving on to the next iteration
+                await animateBunnyMovement(startLat, startLng, endLat, endLng, duration);
+
+                var basketMarker = new mapboxgl.Marker({
+                    element: createBasketMarker(30), // Adjust the size as needed
+                    anchor: 'bottom'
+                })
+                    .setLngLat([endLng, endLat])
+                    .addTo(map);
+            }
+        }
+
+        map.on('load', function () {
+            var size = 40;
+            bunnyMarker = new mapboxgl.Marker({
+                element: createBunnyMarker(size),
+                anchor: 'bottom'
+            })
+                .setLngLat([-109.3667, -27.1214])
+                .addTo(map);
+
+            updateMapStyle();
+            moveBunny();
+        });
+
+        moveBunny();
+    </script>
+</body>
+
+</html>

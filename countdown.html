@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta property="og:title" content="TrackSanta.cc">
+    <meta property="og:description" content="Countdown when Santa Claus will take off!">
+    <meta property="og:image" content="https://media.discordapp.net/attachments/1108153694987501599/1108586021840502875/TSCC-Logo.png">
+    <meta property="og:url" content="https://www.tracksanta.cc/countdown">
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9491485411064787"
+     crossorigin="anonymous"></script>
+    <title>Countdown - TSCC</title>
+    <link rel="shortcut icon" type="x-icon" href="TSCC-Logo.png">
+    <style>
+        html, body {
+            color-scheme: dark black;
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            font-family: system-ui; 
+            text-align: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: white;
+        }
+
+        h1 {
+         font-family: system-ui;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        #countdown-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        #countdown {
+            font-size: 40px;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        #countdown.hide {
+            opacity: 0;
+        }
+
+        #countdown-heading {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            font-size: 25px;
+        }
+
+        #countdown-heading.hide {
+            opacity: 0;
+        }
+
+        #transmission {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            font-size: 24px;
+            color: white;
+        }
+
+        #blue-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background-repeat: repeat-x;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div id="blue-bar"></div>
+    <div id="countdown-container">
+        <h1 id="countdown-heading">Countdown of the Easter Bunny's departure:</h1>
+        <div id="countdown"></div>
+        <div id="transmission"></div>
+    </div>
+
+    <script>
+        // Set the countdown date and time
+        var countdownDate = new Date("March 30, 2024 00:00:00 PST").getTime();
+
+        // Update the countdown and redirect when it's over
+        function updateCountdown() {
+            // Get the current date and time
+            var now = new Date().getTime();
+
+            // Find the time remaining until the countdown date
+            var timeRemaining = countdownDate - now;
+
+            // Calculate the days, hours, minutes, and seconds
+            var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            // Display the countdown
+           document.getElementById("countdown").innerHTML = days + " : " + hours + " : " + minutes + " : " + seconds;
+
+            // If the countdown is finished, redirect to the tracker
+            if (timeRemaining < 0) {
+                clearInterval(countdown);
+                window.location.href = "https://trackeasterbunny.live/";
+            }
+        }
+
+        // Update the countdown every second
+        var countdown = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
