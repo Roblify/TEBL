@@ -1,28 +1,42 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta property="og:title" content="Easter Bunny Tracker">
-    <meta property="og:description" content="Track the Easter Bunny while he delivers eggs and baskets during Easter Eve and day!">
-    <meta property="og:image" content="https://cdn.discordapp.com/attachments/1121973506549223472/1136503436259643442/Bunny.png">
+    <meta property="og:description"
+        content="Track the Easter Bunny while he delivers eggs and baskets during Easter Eve and day!">
+    <meta property="og:image"
+        content="https://cdn.discordapp.com/attachments/1121973506549223472/1136503436259643442/Bunny.png">
     <meta property="og:url" content="https://www.trackeasterbunny.live/">
     <title>Easter Bunny Tracker</title>
     <link rel="shortcut icon" type="x-icon" href="Bunny.png">
     <style>
-        html, body {
+        html,
+        body {
             color-scheme: dark black;
             height: 100%;
             margin: 0;
         }
+
         body {
-            font-family: system-ui; 
+            font-family: system-ui;
             text-align: center;
             background-repeat: no-repeat;
             background-size: cover;
             color: white;
         }
 
+        p {
+            font-size: 15px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
         h1 {
-         font-family: system-ui;
+            font-family: system-ui;
             opacity: 1;
             transition: opacity 0.5s ease;
         }
@@ -76,7 +90,7 @@
         }
     </style>
 </head>
-    
+
 <body>
     <div id="blue-bar"></div>
     <div id="countdown-container">
@@ -84,6 +98,9 @@
         <div id="countdown"></div>
         <div id="transmission"></div>
     </div>
+
+    <p>Note: trackeasterbunny.live (TEBL) is still in development. If you have any questions feel free to contact us
+        at<br>support@trackeasterbunny.live</p>
 
     <script>
         var countdownDate = new Date("March 30, 2024 00:00:00 PST").getTime();
@@ -97,8 +114,8 @@
             var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-            
-           document.getElementById("countdown").innerHTML = days + " : " + hours + " : " + minutes + " : " + seconds;
+
+            document.getElementById("countdown").innerHTML = days + " : " + hours + " : " + minutes + " : " + seconds;
 
             if (timeRemaining < 0) {
                 clearInterval(countdown);
@@ -109,4 +126,5 @@
         var countdown = setInterval(updateCountdown, 1000);
     </script>
 </body>
+
 </html>
