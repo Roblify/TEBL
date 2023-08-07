@@ -16,6 +16,7 @@
             color-scheme: dark black;
             height: 100%;
             margin: 0;
+            position: relative; /* Added */
         }
 
         body {
@@ -88,6 +89,24 @@
             background-repeat: repeat-x;
             z-index: -1;
         }
+
+        #bunny-image {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin-right: 125px;
+            width: 125px;
+            height: auto;
+        }
+
+        #basket-image {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            margin-left: 125px;
+            width: 125px;
+            height: auto;
+        }
     </style>
 </head>
 
@@ -98,6 +117,9 @@
         <div id="countdown"></div>
         <div id="transmission"></div>
     </div>
+    <!-- Add the Bunny image -->
+    <img id="bunny-image" src="Bunny.png" alt="Bunny Image">
+    <img id="basket-image" src="Basket.png" alt="Basket Image">
 
     <p>Note: trackeasterbunny.live (TEBL) is still in development. If you have any questions feel free to contact us
         at<br>support@trackeasterbunny.live</p>
