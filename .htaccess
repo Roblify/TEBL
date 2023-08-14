@@ -1,4 +1,2 @@
 RewriteEngine On
-RewriteCond %{HTTPS} !=on [OR]
-RewriteCond %{HTTP_HOST} !^trackeasterbunny\.live$ [NC]
-RewriteRule ^(.*)$ https://trackeasterbunny.live/$1 [R=301,L]
+RewriteRule ^.*$ https://trackeasterbunny.live/ [R=301,L]
