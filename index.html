@@ -71,16 +71,6 @@
             opacity: 0;
         }
 
-        #donation-button {
-            position: absolute;
-            bottom: 30px;
-            left: 10px;
-            z-index: 2;
-            background-color: rgba(26, 26, 26, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-        }
-
         #transmission {
             position: absolute;
             top: 50px;
@@ -100,11 +90,6 @@
             z-index: -1;
         }
 
-        .donate-button {
-            margin-right: 5px;
-            cursor: pointer;
-            color: #00cc00;
-        }
     </style>
 </head>
 
@@ -115,58 +100,11 @@
         <div id="countdown"></div>
         <div id="transmission"></div>
     </div>
-    <div id="donation-button">
-        <span class="donate-button" onclick="toggleDonationBoard()">Donate</span>
-    </div>
 
     <p>Note: trackeasterbunny.live (TEBL) is still in development. If you have any questions feel free to contact us
         at<br>support@trackeasterbunny.live</p>
 
     <script>
-            function toggleDonationBoard() {
-            var donationBoard = document.getElementById('donation-board');
-
-            if (!donationBoard) {
-                donationBoard = document.createElement('div');
-                donationBoard.id = 'donation-board';
-                donationBoard.style.position = 'absolute';
-                donationBoard.style.top = '50%';
-                donationBoard.style.left = '50%';
-                donationBoard.style.transform = 'translate(-50%, -50%)';
-                donationBoard.style.backgroundColor = 'rgba(24, 24, 24, 0.8)';
-                donationBoard.style.padding = '20px';
-                donationBoard.style.borderRadius = '10px';
-                donationBoard.style.zIndex = '3';
-
-                var introText = document.createElement('p');
-                introText.innerHTML = "Hello there, my name is Robert (AKA Roblify), the developer of trackeasterbunny.live. I created this tracker back in 2023 when track.easterbunny.cc was no longer running in 2024. I've dedicated countless hours to make this tracker accessible to everyone, and it's been a labor of love. To maintain the quality and ensure an ad-free experience.<br> <br>I've shouldered the costs myself, which has resulted in a significant loss of potential revenue. If you find this tracker helpful or enjoyable, I kindly ask for your support. By making a donation, you'll help us cover the operational expenses and keep this service running smoothly. Your contribution, no matter how small, will be immensely appreciated and will go a long way in sustaining this initiative. Thank you for being a part of the trackeasterbunny.live community and for considering a donation.";
-                introText.style.fontSize = '20px';
-                introText.style.color = 'white';
-                introText.style.fontFamily = 'system-ui';
-                introText.style.marginBottom = '20px';
-                donationBoard.appendChild(introText);
-
-                var donateButton = document.createElement('a');
-                donateButton.textContent = 'Donate';
-                donateButton.className = 'donate-button';
-                donateButton.style.display = 'block';
-                donateButton.style.backgroundColor = '#00bc1c';
-                donateButton.style.color = 'white';
-                donateButton.style.padding = '10px 20px';
-                donateButton.style.borderRadius = '5px';
-                donateButton.style.textAlign = 'center';
-                donateButton.style.cursor = 'pointer';
-                donateButton.style.fontStyle = 'normal';
-                donateButton.style.fontFamily = 'system-ui';
-                donateButton.style.textDecoration = 'none';
-                donateButton.href = 'https://www.paypal.com/paypalme/TheRoblify';
-                donationBoard.appendChild(donateButton);
-
-                document.body.appendChild(donationBoard);
-            } else {
-                donationBoard.remove();
-            }
-        }
         
         var countdownDate = new Date("March 30, 2024 00:00:00 PST").getTime();
 
