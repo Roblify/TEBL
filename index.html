@@ -2,10 +2,12 @@
 <html>
 
 <head>
-<meta property="og:title" content="Easter Bunny Tracker 2024">
-<meta property="og:description" content="Track the Easter Bunny while he delivers eggs and baskets during Easter Eve and day!">
-<meta property="og:image" content="https://cdn.discordapp.com/attachments/880617742460407808/1141087934628495580/Bunny.png">
-<meta property="og:url" content="https://www.trackeasterbunny.live/">
+    <meta property="og:title" content="Easter Bunny Tracker 2024">
+    <meta property="og:description"
+        content="Track the Easter Bunny while he delivers eggs and baskets during Easter Eve and day!">
+    <meta property="og:image"
+        content="https://cdn.discordapp.com/attachments/880617742460407808/1141087934628495580/Bunny.png">
+    <meta property="og:url" content="https://www.trackeasterbunny.live/">
     <meta property="og:site_name" content="Track Easter Bunny Live">
     <meta name="theme-color" content="#FFFFFF">
     <title>Easter Bunny Tracker</title>
@@ -89,7 +91,6 @@
             background-repeat: repeat-x;
             z-index: -1;
         }
-
     </style>
 </head>
 
@@ -105,8 +106,8 @@
         at<br>support@trackeasterbunny.live</p>
 
     <script>
-        
-        var countdownDate = new Date("March 30, 2024 10:00:00 PM PST").getTime();
+
+        var countdownDate = new Date("March 30, 2024 00:00:00 PST").getTime();
 
         function updateCountdown() {
             var now = new Date().getTime();
@@ -122,7 +123,7 @@
 
             if (timeRemaining < 0) {
                 clearInterval(countdown);
-                window.location.href = "https://trackeasterbunny.live/";
+                window.location.href = "tracker.html";
             }
         }
 
