@@ -1,20 +1,68 @@
 {
   "name": "easter-bunny-tracker",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "version": "6.1.6",
+  "private": true,
   "dependencies": {
-    "dotenv": "^16.3.1"
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@fortawesome/fontawesome-free": "^6.2.1",
+    "@googlemaps/js-api-loader": "^1.15.1",
+    "@googlemaps/react-wrapper": "^1.1.35",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.2",
+    "@sentry/react": "^7.31.1",
+    "@sentry/tracing": "^7.31.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.2.4",
+    "bowser": "^2.11.0",
+    "core-js": "^3.27.2",
+    "flag-icons": "^6.6.6",
+    "frowser": "^0.2.0",
+    "luxon": "^3.1.0",
+    "mdb-react-ui-kit": "^5.1.0",
+    "react": "^18.2.0",
+    "react-app-polyfill": "^3.0.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "react-transition-group": "^4.4.5",
+    "use-local-storage-state": "^18.1.2",
+    "weather-icons": "github:erikflowers/weather-icons",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "CI=false && sh -ac '. ./.env.${REACT_APP_ENV}; react-scripts build'",
+    "build:production": "REACT_APP_ENV=production npm run build",
+    "build:development": "REACT_APP_ENV=development npm run build",
+    "build:staging": "REACT_APP_ENV=staging npm run build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.05%",
+      "not dead",
+      "Chrome >= 49",
+      "Firefox >= 45",
+      "Opera >= 36",
+      "Safari >= 9"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "dotenv-webpack": "^8.0.1",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "eslint-plugin-googlemaps": "^1.4.15",
+    "eslint-plugin-jquery": "^1.5.1"
   }
 }
